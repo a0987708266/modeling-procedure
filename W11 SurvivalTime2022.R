@@ -76,7 +76,8 @@ ncvTest(M1)
 #拒絕了!代表sigma i之間存在顯著差異，即變異是不一致的
 
 #Normality
-qqPlot(M1)
+qqPlot(M1) 
+#看到圖上其實有很多點在CI外，所以圖形應是顯示非常態的
 lillie.test(es)
 #KS test for normality
 #H0 : Yi服從常態 H1: Yi不服從常態
@@ -84,6 +85,7 @@ shapiro.test(es)
 #Shapiro-Wilk Normality Test
 #H0 : Yi服從常態 H1: Yi不服從常態
 
+#KS test和Shapiro-Wilk Normality Test皆拒絕，即代表Yi不服從常態
 plot(es,type = "l",col='2')
 acf(es, ci=0.99)
 #dwtest(M1)#Durbin-Watson test

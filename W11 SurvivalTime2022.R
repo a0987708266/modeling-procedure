@@ -86,10 +86,13 @@ shapiro.test(es)
 #H0 : Yi服從常態 H1: Yi不服從常態
 
 #KS test和Shapiro-Wilk Normality Test皆拒絕，即代表Yi不服從常態
+
+#Randomness test
 plot(es,type = "l",col='2')
 acf(es, ci=0.99)
-#dwtest(M1)#Durbin-Watson test
+#兩張圖看起來都還好，前後資料並沒有明顯相關
 
+#dwtest(M1)#Durbin-Watson test
 runs.test(es)
 # H0: 殘差是隨機的  H1: 殘差不是隨機的
 

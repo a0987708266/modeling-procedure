@@ -32,7 +32,7 @@ table(STdata$Gender)
 stem(STdata$Stime)
 #可看出Stime這個變數有強烈右偏
 
-#detach(STdata)12
+#detach(STdata)12 #把測試資料區分開(從原始資料中分離)
 set.seed(234)
 Sindex=sample(nrow(STdata),70) #隨機抽取70筆要保留的部分資料
 #Sindex=sample(N, round(N*0.8)) #抽取80%作為要保留的部分資料

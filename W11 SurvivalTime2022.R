@@ -39,7 +39,6 @@ Sindex=sample(nrow(STdata),70) #隨機抽取70筆要保留的部分資料
 Train=STdata[Sindex,]
 Test=STdata[-Sindex,] #把資料分為訓練資料跟測試資料
 
-#Phase IV : Diagnostic
 pairs(Stime~.,data=Train) #用散布圖檢查變數間的關係
 cor(Train[,c(2,3,4,5,6,8)]) #correlation 越高可能代表貢共線性越明顯
 
@@ -48,6 +47,8 @@ summary(M1)
 #Adjusted R-squared若比R-squared小太多，則代表此模型變數過多
 
 
+
+#Phase IV : Diagnostic(四個假設的診斷)
 library(car)
 library(lmtest)
 library(nortest)

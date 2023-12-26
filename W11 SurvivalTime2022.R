@@ -45,6 +45,8 @@ cor(Train[,c(2,3,4,5,6,8)]) #correlation 越高可能代表貢共線性越明顯
 
 M1=lm(Stime~.,data=Train)
 summary(M1)
+#Adjusted R-squared若比R-squared小太多，則代表此模型變數過多
+
 
 library(car)
 library(lmtest)

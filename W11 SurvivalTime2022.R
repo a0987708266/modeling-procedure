@@ -84,7 +84,6 @@ lillie.test(es)
 shapiro.test(es)
 #Shapiro-Wilk Normality Test
 #H0 : Yi服從常態 H1: Yi不服從常態
-
 #KS test和Shapiro-Wilk Normality Test皆拒絕，即代表Yi不服從常態
 
 #Randomness test
@@ -95,11 +94,12 @@ acf(es, ci=0.99)
 #dwtest(M1)#Durbin-Watson test
 runs.test(es)
 # H0: 殘差是隨機的  H1: 殘差不是隨機的
+#檢定結果殘差是隨機的，隨機性hold
 
-#結論: 四大基本假設除了隨機性，其餘的齊一性、常態性、和函數形式皆有問題
+#Phase IV結論: 四大基本假設除了隨機性，其餘的齊一性、常態性、和函數形式皆有問題
 
 
-#Phase V : 矯正和做變數選擇，Refined and extend the model
+#Phase V : Refined and extend the model(矯正和做變數選擇)
 #Step 1:矯正
 library(MASS)
 boxcox(M1) #取靠近極值，更好解釋的那個

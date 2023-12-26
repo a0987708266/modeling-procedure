@@ -53,6 +53,7 @@ library(car)
 library(lmtest)
 library(nortest)
 library(randtests)
+
 ###Function Form and Homogeneity
 #e=residuals(M1)
 es=rstandard(M1) #求出殘差
@@ -66,13 +67,13 @@ residualPlot(M1,type="rstandard",quadratic=F)
 #以及資料變異的一致性，看點是否均勻(齊一性)
 
 resettest(M1,power=2,type='regressor') 
-#檢驗屬量變數的二次項是否同時為零
+#檢驗屬量變數的二次項係數是否應該同時為零
 #p value 小於0.05，拒絕了!代表此模型有潛在的二次趨勢
 
 ncvTest(M1)
 #Breusch-Pagan test
-#檢定齊一性的，看sigma i 是否不論i為和皆相同
-#拒絕了!代表sigma i之間存在顯著差異
+#檢定齊一性的，看sigma i 是否不論i為何皆相同
+#拒絕了!代表sigma i之間存在顯著差異，即變異是不一致的
 
 #Normality
 qqPlot(M1)

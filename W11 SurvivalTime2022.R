@@ -17,7 +17,7 @@ STdata=read.table("SurvivalTime.txt",header=T)
 STdata$AU=as.factor(STdata$AU)
 STdata$Gender=as.factor(STdata$Gender) #把明顯為類別變數的變數轉為factor
 
-#attach(STdata)
+#attach(STdata)  #檢測各變數中有沒有離群值或左右偏
 plot(STdata$AU)
 table(STdata$AU)
 #barplot(table(STdata$AU))
@@ -25,11 +25,12 @@ stem(STdata$BCS)
 stem(STdata$PI)
 stem(STdata$ET)
 stem(STdata$LT)
-stem(STdata$AGE) #檢測各變數中有沒有離群值
+stem(STdata$AGE)
 plot(STdata$Gender)
 table(STdata$Gender)
 #barplot(table(STdata$Gender))
 stem(STdata$Stime)
+#可看出Stime這個變數有強烈右偏
 
 #detach(STdata)12
 set.seed(234)

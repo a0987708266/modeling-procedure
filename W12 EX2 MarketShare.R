@@ -13,7 +13,7 @@
 
 #Phase III: Do the Math
 
-setwd('C:\\Users\\a0987\\OneDrive\\桌面\\迴歸分析')
+setwd('C:\\Users\\a0987\\git-repos\\modeling precedure')
 Market=read.table("MarketShare.txt",header=T)
 Market$DiscP <- as.factor(Market$DiscP)
 Market$PProm <- as.factor(Market$PProm)

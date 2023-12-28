@@ -36,6 +36,7 @@ pairs(MShare~.,data=Train) #用散布圖檢查變數間的關係
 
 M1=lm(MShare~.,data=Train)
 summary(M1)
+#Adjusted R-squared若比R-squared小太多，則代表此模型變數過多
 #可看出R2跟Ra2差了6%，模型需改進
 
 ##Phase IV:

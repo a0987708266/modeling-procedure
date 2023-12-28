@@ -99,11 +99,12 @@ runs.test(es)
 #Phase IV結論: 四大基本假設除了隨機性，其餘的齊一性、常態性、和函數形式皆有問題
 
 
-#Phase V : Refined and extend the model(矯正和做變數選擇)
-#Step 1:矯正
-library(MASS)
-boxcox(M1) #取靠近極值，更好解釋的那個
+#Phase V : Refined and extend the model(矯正、變數選擇、有效性評估)
 
+#Step 1:矯正
+
+library(MASS)
+boxcox(M1) #取靠近極值，更好解釋的那個(做Y的轉換時比較好跟顧客解釋)
 #Stime1=log(Stime)，選擇取log
 M2=lm(log(Stime)~.,data=Train)
 summary(M2) #新模型
@@ -112,63 +113,84 @@ summary(M2) #新模型
 #e2=residuals(M2)
 e2s=rstandard(M2)
 yhat2=fitted.values(M2)
+
+###Function Form and Homogeneity
 plot(yhat2,e2s)
 abline(h=0,col=2)
 residualPlot(M2,type="rstandard",quadratic=F)
-
+#畫出殘差圖，看資料的中心是否平穩在0的虛線上(function form);
+#以及資料變異的一致性，看點是否均勻(齊一性)
 resettest(M2,power=2,type='regressor')
-ncvTest(M2)#This test is often called the Breusch-Pagan test; 
+#檢驗屬量變數的二次項係數是否應該同時為零
+ncvTest(M2)
+#This test is often called the Breusch-Pagan test; 
+#檢定齊一性的，看sigma i 是否不論i為何皆相同
+#接受Function Form and Homogeneity是hold
 
+#Normality
 qqPlot(M2)
 lillie.test(e2s)#KS test for normality
 shapiro.test(e2s)#Shapiro-Wilk Normality Test
+#接受Normality是hold
 
+#Randomness test
 plot(e2s,type = "l",col='2')
 acf(e2s,ci=0.99)
 #dwtest(M2)#Durbin-Watson test
 runs.test(es)
+#接受Randomness是hold
 
-#Step 2 :做變數的選擇，用逐步回歸或是criteria
-#criteria
+#Step 1:矯正完結
+
+#Step 2:變數選擇，用逐步回歸或是criteria
+#用criteria
 library(leaps)
 subx=regsubsets(log(Stime)~., nbest=3, data=Train)
 
 subsets(subx,statistic="bic")
 subsets(subx,statistic="bic",min.size=3, max.size=6)
-
+#看BIC最低的參數組合就是最佳的model
 subsets(subx,statistic="adjr2", legend=F)
-subsets(subx,statistic="adjr2",min.size=4, max.size=6)
+subsets(subx,statistic="adjr2",min.size=4, max.size=8)
+#看Adjusted R-squared最高的參數組合就是最佳的model
 
 #subsets(subx,statistic="cp")
 #abline(a=0,b=1)
 #subsets(subx,statistic="cp",min.size=8, max.size=9)
 #abline(a=0,b=1)
 
-#逐步回歸
+#或用 逐步回歸
 s1=step(M2) #預設是用AIC
 s2=step(M2,k=log(dim(Train)[1])) #改成用BIC
 
 
 M2a=lm(log(Stime)~AU+BCS+PI+ET+LT,data=Train)
+#從s1來，剛剛AIC挑出的最佳參數組合
 summary(M2a)
-M2b=lm(log(Stime)~AU+BCS+PI+ET,data=Train)
+
+M2b=lm(log(Stime)~AU+LT+PI+ET,data=Train)
+#從s2來，剛剛BIC挑出的最佳參數組合
 summary(M2b)
-M2br = lm(log(Stime)~BCS+PI+ET,data=Train) #拿掉不顯著(可能可以拿掉)的AU
+
+#General Linear Test(想把M2b中可能不顯著的AU拿掉，故要比較拿掉前跟拿掉後)
+M2br = lm(log(Stime)~LT+PI+ET,data=Train) #拿掉不顯著(可能可以拿掉)的AU
 anova(M2b, M2br) 
-#去做general linear test(拿掉一個變數的reduced model 和原本的full model比)
-#此處是在檢驗AU的dummy variable是否同時為零
+#做general linear test(拿掉一個變數的reduced model 和原本的full model比)的H0跟H1為
+#H0: 該變數係數為0  H1: 該變數係數不為0 (此處是在檢驗AU的dummy variable是否同時為零)
+#結果為顯著，即AU不為0，不可拿掉
 
 #M2b or M2a can be our final model
 
-#Outliers might existed
+#檢測共線性
 vif(M1)
 vif(M2a)
 vif(M2b) #檢測共線性是否太過嚴重，看該模型vif有沒有超過10
 
 
-#Phase VI :有效性的評估 (MSE、RMSE、MAE、MAPE)
-#Step 1:用有效性的四個指標來決定最終採用的模型
-M1p=predict(M1, newdata=Test) #用一開始保留的Test 資料做評估
+#Step 3:有效性評估 (MSE、RMSE、MAE、MAPE)
+###Step 1:用有效性的四個指標來決定最終採用的模型
+M1p=predict(M1, newdata=Test) #用一開始保留的Test資料做評估
+#建立M1模型(矯正前那個)的預測值
 r1=M1p-Test$Stime
 MSE1=mean(r1^2)
 RMSE1 = sqrt(MSE1)
@@ -176,8 +198,9 @@ MAE1 = mean(abs(r1))
 MAPE1=mean(abs(r1/Test$Stime))
 
 M2ap=predict(M2a, newdata=Test)
+#建立M2a模型的預測值
 r2a=exp(M2ap)-Test$Stime 
-#注意! 因為我們在建M2a模時資料有經過log轉換，所以要注意要先換回去才能跟保留的原始資料比
+#注意! 因為我們在建M2a模時資料有經過log轉換，所以誤差要注意要先換回去才能跟保留的原始資料比
 MSE2a=mean(r2a^2)
 RMSE2a = sqrt(MSE2a)
 MAE2a = mean(abs(r2a))
@@ -191,21 +214,31 @@ MAE2b = mean(abs(r2b))
 MAPE2b=mean(abs(r2b/Test$Stime))
 
 #according to our validation result
-#our final model is m2b
+#our final model is m2a
 
-#Step 2: 解釋這個模型的意義和其預測的價值
-summary(M2b)
-confint(M2b)
+###Step 2: 解釋這個模型的意義和其預測的價值
+summary(M2a)
+confint(M2a)
 #the meaning of coefficients
-#R2=0.78
+#例: ET  0.011043381 0.01881875
+#    其餘參數不動，當ET每增加1，模型的Y會上升0.011到0.019
+#R2=0.78 (R2A是用來選變數，而不是選模型)
 #MAE=103,MAPE.....
 
-p1 <- predict(M2a,newdata = Test,interval="confidence",level=0.99) #預測平均值的CI
-p2 <- predict(M2a,newdata = Test,interval="prediction",level=0.99) #預測單一值的CI
+p1 <- predict(M2a,newdata = Test,interval="confidence",level=0.99)
+#預測平均值的CI
+p2 <- predict(M2a,newdata = Test,interval="prediction",level=0.99) 
+#預測單一值的CI
 
 p1f <- exp(p1)
+p1f
+# fit(平均值)     lwr(信賴區間下界)      upr(信賴區間上界)
+
 p2f <- exp(p2) #把之前轉換過的資料調整回來
+p2f
+# fit(預測值之單一值)     lwr(信賴區間下界)      upr(信賴區間上界)
 
 contrasts(AU)
+#調類別變數的參考類別
 #type <- relevel(type,ref="prof")
 

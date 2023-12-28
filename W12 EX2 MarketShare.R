@@ -39,7 +39,7 @@ summary(M1)
 #Adjusted R-squared若比R-squared小太多，則代表此模型變數過多
 #可看出R2跟Ra2差了6%，模型需改進
 
-##Phase IV:
+#Phase IV:Diagnostic(四個假設的診斷)
 library(car)
 library(lmtest)
 library(nortest)

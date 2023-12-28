@@ -31,7 +31,7 @@ Sindex=sample(nrow(Market),30)
 Train=Market[Sindex,]
 Test=Market[-Sindex,]
 
-pairs(MShare~.,data=Train)
+pairs(MShare~.,data=Train) #用散布圖檢查變數間的關係
 #cor(Train[,c(2,3,4,5,6,8)])
 
 M1=lm(MShare~.,data=Train)

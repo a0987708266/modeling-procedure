@@ -45,7 +45,7 @@ library(lmtest)
 library(nortest)
 library(randtests)
 ###Function Form and Homogeneity
-#e=residuals(M1)
+#e=residuals(M1) 求出殘差
 es=rstandard(M1)
 residualPlot(M1,type="rstandard",quadratic=F)
 

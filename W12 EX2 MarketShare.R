@@ -26,7 +26,7 @@ table(Market$DiscP)
 plot(Market$PProm)
 table(Market$PProm) #檢測各變數中有沒有離群值或左右偏
 
-set.seed(123)
+set.seed(123) #把測試資料區分開
 Sindex=sample(nrow(Market),30)
 Train=Market[Sindex,]
 Test=Market[-Sindex,]

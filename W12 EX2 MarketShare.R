@@ -7,7 +7,7 @@
 #Phase II: MAKE ASSUMPTIONS AND DEFINE ESSENTIAL VARIABLES
 #Four basic assumptions
 #All the important factors are included in the study.
-#Depenent Varialbe: MShare
+#Dependent Variable: MShare
 #Independent Variable: Other variables in the dataset.
 
 

@@ -48,6 +48,8 @@ library(randtests)
 #e=residuals(M1) 求出殘差
 es=rstandard(M1)
 residualPlot(M1,type="rstandard",quadratic=F)
+#畫出殘差圖，看資料的中心是否平穩在0的虛線上(function form);
+
 
 resettest(M1,power=2,type='regressor')
 ncvTest(M1)#This test is often called the Breusch-Pagan test; 

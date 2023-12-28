@@ -24,7 +24,7 @@ stem(Market$GNrate)
 plot(Market$DiscP)
 table(Market$DiscP)
 plot(Market$PProm)
-table(Market$PProm)
+table(Market$PProm) #檢測各變數中有沒有離群值或左右偏
 
 set.seed(123)
 Sindex=sample(nrow(Market),30)
